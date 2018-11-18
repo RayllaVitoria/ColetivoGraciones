@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block body %}
+
+
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+		
+			<h3>Novo Post</h3>
+			<div class="box box-primary">
+			    <form method="post" class="post-form" enctype="multipart/form-data">{% csrf_token %}
+			        {{ form.as_p }}
+			        <button type="submit" class="save btn btn-default">Salvar</button>
+
+
+
+			    </form>
+					
+
+				</div>
+			
+		</div>
+
+
+	</div>
+</div>
+
+
+
+{% endblock %}        
+

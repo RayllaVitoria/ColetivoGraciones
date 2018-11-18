@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block body %}
+
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+
+        {% for post in object_list %}
+        <div>
+            <p>publicado: {{ post.published_date}}</p>
+            <h2><a href="{% url 'blog:post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
+            {% if post.capa %}
+				<img src="{{ post.capa.url }}">
+			{% endif %}
+            
+            <p>{{ post.text }}</p>
+
+
+            <a href="{% url 'blog:post_delete' pk=post.pk %}" class="btn btn-danger btn-xs">
+            Deletar</a>
+        </div>
+        <hr>
+        {% endfor %}
+
+</div>
+
+{% endblock %}       
+
+{% block scripts %}
+
+<script>
+$('#listItems').on('click', '.deleteItem', function(e){
+    e.preventDefault();
+    var id = $( this ).attr("data-id"),
+    linha_editada = $(e.currentTarget).closest('tr');
+    token = "{{csrf_token}}";
+    // verifico o protocolo
+    if (window.location.protocol == 'http:') {
+        urlDel = "http://{{ request.get_host }}/post/"+ id +"/delete";
+    }else{
+        urlDel = "https://{{ request.get_host }}/post/"+ id +"/delete";
+    }
+    swal({
+        title: "Deletar Permanentemente!",
+        text: "Deseja realmente deletar esse post?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "SIM!",
+        cancelButtonText: "CANCELAR!",
+        closeOnConfirm: false
+    }, function(){
+        //window.location.href = "http://localhost/ce/public/admin/gerenciarbanco/delete/"+id;
+        $.ajax({
+            url: urlDel,
+            type: 'get',
+            //data: { csrfmiddlewaretoken: token },
+        })
+        .done(function(d){
+            if ( d.code == 1 ){
+                swal('Excluido!','Post excluido com sucesso!',"success");
+                linha_editada.hide();
+            }
+        })
+        .fail(function(f){
+            swal('Falha!','Erro ao excluir o post!',"error");
+        });
+    });
+});
+</script>
+
+{% endblock %} 

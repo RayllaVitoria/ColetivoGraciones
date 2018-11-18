@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block body %}
+
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+
+        
+        <div>
+            <p>publicado: {{ post.published_date}}</p>
+            <h2><a href="">{{ post.title }}</a></h2>
+            <img src="{{ post.capa.url }}">
+            <p>{{ post.text }}</p>
+        </div>
+        <hr>
+        
+
+</div>
+
+{% endblock %}        
